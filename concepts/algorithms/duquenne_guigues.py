@@ -11,7 +11,7 @@ def double_derivation(A, context):   # Used to check if input set is a closed se
 
 
 # Algorithm to find the next preclosure in lectical order:
-def next_preclosure(A, M, context):
+def next_preclosure(A, M):
     M_reversed = list(reversed(list(M)))
     
     for m in M_reversed:
