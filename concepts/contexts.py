@@ -794,3 +794,57 @@ class Context(ExportableMixin, LatticeMixin,
         return junctors.Relations(self.properties,
                                   self._extents.bools(),
                                   include_unary)
+
+    def canonBasis(self):
+        """ Return the canonical basis of the context.
+
+        Returns:
+            Canonical basis of the context.
+
+        Example:
+            >>> import concepts
+            >>> context = concepts.Context.fromstring(concepts.EXAMPLE)
+            >>> for implications in context.canonBasis():
+            ...     print(implications)
+            Time elapsed during algorithm: 0.203 seconds
+            ('-pl',) -> ('+sg',)
+            ('-sg',) -> ('+pl',)
+            ('+pl',) -> ('-sg',)
+            ('+sg',) -> ('-pl',)
+            ('+pl', '+sg', '-pl', '-sg') -> ('+1', '+2', '+3', '-1', '-2', '-3') [trivial]
+            ('+3',) -> ('-1', '-2')
+            ('-2', '-3') -> ('+1',)
+            ('+2',) -> ('-1', '-3')
+            ('-1', '-3') -> ('+2',)
+            ('-1', '-2') -> ('+3',)
+            ('+1',) -> ('-2', '-3')
+            ('+1', '+2', '+3', '-1', '-2', '-3') -> ('+pl', '+sg', '-pl', '-sg') [trivial]
+        """
+        return algorithms.dg_basis(self)
+    
+    def canonBasisOpt(self):
+        """ Return the canonical basis of the context with a more efficient algorithm.
+
+        Returns:
+            Canonical basis of the context.
+
+        Example:
+            import concepts
+            >>> context = concepts.Context.fromstring(concepts.EXAMPLE)
+            >>> for implications in context.canonBasisOpt():
+            ...     print(implications)
+            Time elapsed during algorithm: 0.133 seconds
+            ('-pl',) -> ('+sg',)
+            ('-sg',) -> ('+pl',)
+            ('+pl',) -> ('-sg',)
+            ('+sg',) -> ('-pl',)
+            ('+3',) -> ('-1', '-2')
+            ('-2', '-3') -> ('+1',)
+            ('+2',) -> ('-1', '-3')
+            ('-1', '-3') -> ('+2',)
+            ('-1', '-2') -> ('+3',)
+            ('+1',) -> ('-2', '-3')
+            ('+1', '+pl', '+sg', '-2', '-3', '-pl', '-sg') -> ('+2', '+3', '-1') [trivial]
+            ('+1', '+2', '+3', '-1', '-2', '-3') -> ('+pl', '+sg', '-pl', '-sg') [trivial]
+        """
+        return algorithms.dg_basis_optimized(self)
