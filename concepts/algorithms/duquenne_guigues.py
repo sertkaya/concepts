@@ -117,25 +117,14 @@ def lin_implication_closure(X, implications):
         
         implList = implDict.get(str(remove), [])
         
-        if isinstance(implList, list):
-            numLists = sum(isinstance(item, list) for item in implList)
-
-        if numLists > 1:
-            for implication in implList:
-                countDict[str(implication)] -= 1
+        for implication in implList:
+            countDict[str(implication)] -= 1
             
-                if countDict[str(implication)] == 0:
-                    add = [x for x in list(ast.literal_eval(implication[1])) if x not in XCopy]
-                    XCopy = list(set(XCopy).union(add))
-                    update = list(set(update).union(add))
-                    
-        if numLists == 1:
-            countDict[str(implList[0])] -= 1
-            
-            if countDict[str(implList[0])] == 0:
-                add = [x for x in list(ast.literal_eval(implList[0][1])) if x not in XCopy]
+            if countDict[str(implication)] == 0:
+                add = [x for x in list(ast.literal_eval(implication[1])) if x not in XCopy]
                 XCopy = list(set(XCopy).union(add))
                 update = list(set(update).union(add))
+                
     return XCopy
 
 
