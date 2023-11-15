@@ -166,6 +166,7 @@ def canonical_basis_optimized(attributes, context):
                     subset = B.copy()
                     i = element
                     break
+                
         derived_closure = double_derivation(subset, context)
         
         if tuple(subset) != derived_closure:
@@ -175,15 +176,15 @@ def canonical_basis_optimized(attributes, context):
             if conclusion and sorted(closureSet) == sorted(subset):
                 implications.append(str(tuple(sorted(subset))) + arrow + str(tuple(sorted(conclusion))))
                 
-        ACLnoA = [x for x in list(double_derivation(subset, context)) if x not in subset]
+        ACLnoA = [x for x in list(derived_closure) if x not in subset]
 
         if not has_less_than(ACLnoA, i, attributes):
             
-            if sorted(list(double_derivation(subset, context))) != sorted(attributes):
+            if sorted(list(derived_closure)) != sorted(attributes):
                 
-                if subset != list(double_derivation(subset, context)):
+                if subset != list(derived_closure):
                     
-                    for m in list(reversed(copyAttributes)):
+                    for m in list(reversed(attributes)):
                         
                         if m not in subset and m != i:
                             subset.append(m)
