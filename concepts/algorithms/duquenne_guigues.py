@@ -195,14 +195,24 @@ def canonical_basis_optimized(attributes, context):
 
 
 # Check which implications are trivial and label as trivial if so:
-def trivial_implications(implications, attributes):
+def trivial_implications(implications, objects, context):
     newImplications = []
     
     for implication in implications:
+        trivial = True
+        currentImplication = implication.split(arrow)
+        currentPremise = list(ast.literal_eval(currentImplication[0]))
         
-        if all(attr in implication for attr in attributes):
-            implication = implication + " [trivial]"
+        # Check if the premise of the current implication is a subset of the intension of any object
+        for obj in objects:
             
+            if all(attr in list(context.intension([obj])) for attr in currentPremise):
+                trivial = False
+                break
+            
+        if trivial:
+            implication = implication + " [trivial]"
+
         newImplications.append(implication)
     return newImplications
 
@@ -210,6 +220,7 @@ def trivial_implications(implications, attributes):
 # Method to calculate the canonical basis:
 def dg_basis(context):
     Properties = list(context.properties)
+    Objects = list(context.objects)
     start_time = time.time()
     
     canonBase = canonical_basis(Properties, context)
@@ -217,12 +228,13 @@ def dg_basis(context):
     elapsed_time = time.time() - start_time
     elapsed_time_seconds = round(elapsed_time, 3)
     print("Time elapsed during algorithm: %s seconds" % elapsed_time_seconds)
-    return trivial_implications(canonBase, Properties)
+    return trivial_implications(canonBase, Objects, context)
 
 
 # Optimized version of dg_basis():
 def dg_basis_optimized(context):
     Properties = list(context.properties)
+    Objects = list(context.objects)
     start_time_optimized = time.time()
     
     canonBaseOptimized = canonical_basis_optimized(Properties, context)
@@ -230,4 +242,4 @@ def dg_basis_optimized(context):
     elapsed_time_optimized = time.time() - start_time_optimized
     elapsed_time_optimized_seconds = round(elapsed_time_optimized, 3)
     print("Time elapsed during algorithm: %s seconds" % elapsed_time_optimized_seconds)
-    return trivial_implications(canonBaseOptimized, Properties)
+    return trivial_implications(canonBaseOptimized, Objects, context)
