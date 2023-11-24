@@ -11,7 +11,7 @@ def double_derivation(A, context):   # Used to check if input set is a closed se
 
 
 # Algorithm to find the next preclosure in lectical order:
-def next_preclosure(A, M):
+def next_preclosure(A, M, context):
     M_reversed = list(reversed(list(M)))
     
     for m in M_reversed:
@@ -20,7 +20,10 @@ def next_preclosure(A, M):
             A.remove(m)
         else:
             A.extend([m])
-            return A
+            if list(double_derivation(A, context)) == A:
+                return next_preclosure(A, M, context)
+            else:
+                return A
     return M
 
 
@@ -67,23 +70,23 @@ def canonical_basis(attributes, context):
             if conclusion and sorted(closureSet) == sorted(subset):
                 implications.append(str(tuple(sorted(subset))) + arrow + str(tuple(sorted(conclusion))))
                 
-        subset = next_preclosure(subset, attributes)
+        subset = next_preclosure(subset, attributes, context)
     return implications
 
 
 # Check if subset A has any element less than 'a' over given set M:
 def has_less_than(A, a, M):
-    j = M[len(M) - 1]
+    j = M[0]
     num = 1
 
     while j != a:
         if j in A:
             return True
-        elif j == M[0]:
+        elif j == M[-1]:
             return False
         else:
+            j = M[num]
             num +=  1
-            j = M[len(M) - num]
     return False
 
 
@@ -169,17 +172,7 @@ def canonical_basis_optimized(attributes, context):
 
         if not has_less_than(ACLnoA, i, attributes):
             
-            if sorted(list(derived_closure)) != sorted(attributes):
-                
-                if subset != list(derived_closure):
-                    
-                    for m in list(reversed(attributes)):
-                        
-                        if m not in subset and m != i:
-                            subset.append(m)
-                        elif m == i:
-                            break
-                        
+            subset = list(derived_closure)
             i = attributes[len(attributes) - 1]
             
         else:
@@ -189,8 +182,6 @@ def canonical_basis_optimized(attributes, context):
                 elif m == i:
                     break
                 
-            if attributes[0] in subset:
-                i = attributes[len(attributes) - 1]
     return implications
 
 
