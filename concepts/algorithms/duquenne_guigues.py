@@ -136,7 +136,7 @@ def canonical_basis_optimized(attributes, context):
     implications = []
     subset = list(double_derivation([], context))
     if len(subset):
-        implications.append("('',)" + arrow + str(tuple(sorted(subset))))
+        implications.append("()" + arrow + str(tuple(sorted(subset))))
     i = attributes[len(attributes) - 1]   # largest element of attributes
     
     while sorted(subset) != sorted(attributes):
