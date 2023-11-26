@@ -804,8 +804,8 @@ class Context(ExportableMixin, LatticeMixin,
         Example:
             >>> import concepts
             >>> context = concepts.Context.fromstring(concepts.EXAMPLE)
-            >>> for implications in context.canonBasis():
-            ...     print(implications)
+            >>> for implication in context.canonBasis():
+            ...     print(implication)
             Time elapsed during algorithm: 0.203 seconds
             ('-pl',) -> ('+sg',)
             ('-sg',) -> ('+pl',)
@@ -831,9 +831,9 @@ class Context(ExportableMixin, LatticeMixin,
         Example:
             import concepts
             >>> context = concepts.Context.fromstring(concepts.EXAMPLE)
-            >>> for implications in context.canonBasisOpt():
-            ...     print(implications)
-            Time elapsed during algorithm: 0.133 seconds
+            >>> for implication in context.canonBasisOpt():
+            ...     print(implication)
+            Time elapsed during algorithm: 0.008 seconds
             ('-pl',) -> ('+sg',)
             ('-sg',) -> ('+pl',)
             ('+pl',) -> ('-sg',)
@@ -844,7 +844,5 @@ class Context(ExportableMixin, LatticeMixin,
             ('-1', '-3') -> ('+2',)
             ('-1', '-2') -> ('+3',)
             ('+1',) -> ('-2', '-3')
-            ('+1', '+pl', '+sg', '-2', '-3', '-pl', '-sg') -> ('+2', '+3', '-1') [trivial]
-            ('+1', '+2', '+3', '-1', '-2', '-3') -> ('+pl', '+sg', '-pl', '-sg') [trivial]
         """
         return algorithms.dg_basis_optimized(self)
